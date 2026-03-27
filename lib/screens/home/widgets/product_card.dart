@@ -17,7 +17,8 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final double finalPrice = specialPrice;
+    final double finalPrice =
+    (specialPrice > 0) ? specialPrice : sellingPrice;
 
     final int discount =
     (sellingPrice > 0 && finalPrice < sellingPrice)
@@ -27,21 +28,16 @@ class ProductCard extends StatelessWidget {
     return Container(
       width: 165,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.05), // 🔥 DARK GLASS
         borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 3),
-          )
-        ],
+        border: Border.all(color: Colors.white10),
       ),
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
+          /// 🔥 IMAGE SECTION
           Stack(
             children: [
               ClipRRect(
@@ -51,35 +47,41 @@ class ProductCard extends StatelessWidget {
                 child: image.isNotEmpty
                     ? Image.network(
                   image,
-                  height: 150,
+                  height: 140,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
-                    height: 120,
-                    color: Colors.grey.shade200,
-                    child: const Icon(Icons.image_not_supported),
+                    height: 140,
+                    color: Colors.grey.shade800,
+                    child: const Icon(Icons.image, color: Colors.white54),
                   ),
                 )
                     : Container(
-                  height: 120,
-                  color: Colors.grey.shade200,
-                  child: const Icon(Icons.image),
+                  height: 140,
+                  color: Colors.grey.shade800,
+                  child: const Icon(Icons.image, color: Colors.white54),
                 ),
               ),
 
+              /// ❤️ WISHLIST ICON
               Positioned(
                 top: 8,
                 right: 8,
                 child: Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.black54,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.favorite_border, size: 18),
+                  child: const Icon(
+                    Icons.favorite_border,
+                    size: 16,
+                    color: Colors.white,
+                  ),
                 ),
               ),
 
+              /// 🔥 DISCOUNT BADGE
               if (discount > 0)
                 Positioned(
                   left: 8,
@@ -88,7 +90,7 @@ class ProductCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: const Color(0xFFD80A28), // 🔥 BRAND COLOR
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -104,6 +106,7 @@ class ProductCard extends StatelessWidget {
             ],
           ),
 
+          /// 🔽 PRODUCT INFO
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 10,
@@ -113,6 +116,7 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
+                /// 📝 NAME
                 Text(
                   name,
                   maxLines: 2,
@@ -120,18 +124,20 @@ class ProductCard extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
+                    color: Colors.white,
                   ),
                 ),
 
                 const SizedBox(height: 6),
 
+                /// 💰 PRICE
                 Row(
                   children: [
 
                     Text(
                       "₹${finalPrice.toStringAsFixed(0)}",
                       style: const TextStyle(
-                        color: Colors.green,
+                        color: Color(0xFF7F5AF0),
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
@@ -140,12 +146,17 @@ class ProductCard extends StatelessWidget {
                     const SizedBox(width: 6),
 
                     if (discount > 0)
-                      Text(
-                        "₹${sellingPrice.toStringAsFixed(0)}",
-                        style: const TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.grey,
-                          fontSize: 12,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: Text(
+                          "₹${sellingPrice.toStringAsFixed(0)}",
+                          style: const TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            decorationThickness: 5, // 🔥 IMPORTANT
+                            color: Colors.white70,  // 🔥 MORE VISIBLE
+                            fontSize: 13,           // 🔥 SLIGHTLY BIGGER
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                   ],

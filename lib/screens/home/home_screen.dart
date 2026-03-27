@@ -13,7 +13,7 @@ class HomeScreen extends ConsumerWidget {
     final bannerAsync = ref.watch(bannerProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F6FA),
+      backgroundColor: const Color(0xFF0D0D0D),
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -21,8 +21,9 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
+              /// 🔥 HEADER
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -32,57 +33,53 @@ class HomeScreen extends ConsumerWidget {
                       children: [
                         Text(
                           "Hello 👋",
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                          style: TextStyle(fontSize: 14, color: Colors.white54),
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 4),
                         Text(
-                          "Welcome to PoeageHub",
+                          "PoeageHub",
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ],
                     ),
 
-                    const Row(
+                    Row(
                       children: [
-                        Icon(Icons.notifications_none, size: 28),
-                        SizedBox(width: 15),
-                        Icon(Icons.shopping_cart_outlined, size: 28),
+                        const Icon(Icons.notifications_none, color: Colors.white, size: 26),
+                        const SizedBox(width: 15),
+                        const Icon(Icons.shopping_cart_outlined, color: Colors.white, size: 26),
                       ],
                     )
                   ],
                 ),
               ),
 
-              const SizedBox(height: 10),
-
+              /// 🔍 SEARCH BAR (GLASS STYLE)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
                   height: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colors.white.withOpacity(0.05),
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 6)
-                    ],
+                    border: Border.all(color: Colors.white10),
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.search),
+                      Icon(Icons.search, color: Colors.white54),
                       SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           "Search products...",
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.white38),
                         ),
                       ),
-                      Icon(Icons.mic),
-                      SizedBox(width: 10),
-                      Icon(Icons.camera_alt),
+                      Icon(Icons.mic, color: Colors.white54),
                     ],
                   ),
                 ),
@@ -90,39 +87,35 @@ class HomeScreen extends ConsumerWidget {
 
               const SizedBox(height: 25),
 
+              /// 🔥 BANNER
               bannerAsync.when(
                 data: (snapshot) {
-                  final banners = snapshot.docs;
 
-                  if (banners.isEmpty) {
-                    return const SizedBox();
-                  }
+                  final banners = snapshot.docs;
+                  if (banners.isEmpty) return const SizedBox();
 
                   return SizedBox(
                     height: 160,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: banners.length,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: banners.length,
                       itemBuilder: (context, index) {
 
                         final banner = banners[index].data();
                         final imageUrl = banner["imageUrl"] ?? "";
 
                         return Container(
-                          width: MediaQuery.of(context).size.width - 40,
+                          width: MediaQuery.of(context).size.width - 60,
                           margin: const EdgeInsets.only(right: 15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.network(
                               imageUrl,
                               fit: BoxFit.cover,
                               errorBuilder: (_, __, ___) => Container(
-                                color: Colors.grey.shade300,
-                                child: const Icon(Icons.image),
+                                color: Colors.grey.shade800,
+                                child: const Icon(Icons.image, color: Colors.white54),
                               ),
                             ),
                           ),
@@ -137,34 +130,18 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 error: (e, _) => const SizedBox(
                   height: 160,
-                  child: Center(child: Text("Banner Error")),
+                  child: Center(child: Text("Banner Error", style: TextStyle(color: Colors.white))),
                 ),
               ),
 
               const SizedBox(height: 25),
 
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Categories",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "See All",
-                      style: TextStyle(color: Colors.blue),
-                    )
-                  ],
-                ),
-              ),
+              /// 🔥 SECTION TITLE
+              _sectionTitle("Categories"),
 
               const SizedBox(height: 15),
 
+              /// 🔥 CATEGORIES
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GridView.count(
@@ -173,7 +150,7 @@ class HomeScreen extends ConsumerWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   mainAxisSpacing: 15,
                   crossAxisSpacing: 15,
-                  childAspectRatio: 0.75,
+                  childAspectRatio: 0.8,
                   children: const [
                     _CategoryItem(icon: Icons.phone_android, label: "Electronics"),
                     _CategoryItem(icon: Icons.checkroom, label: "Fashion"),
@@ -185,30 +162,13 @@ class HomeScreen extends ConsumerWidget {
 
               const SizedBox(height: 25),
 
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Trending Products",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "View All",
-                      style: TextStyle(color: Colors.blue),
-                    )
-                  ],
-                ),
-              ),
+              _sectionTitle("Trending Products"),
 
               const SizedBox(height: 15),
 
+              /// 🔥 PRODUCTS
               SizedBox(
-                height: 230,
+                height: 240,
                 child: productsAsync.when(
 
                   data: (snapshot) {
@@ -217,14 +177,14 @@ class HomeScreen extends ConsumerWidget {
 
                     if (products.isEmpty) {
                       return const Center(
-                        child: Text("No products available"),
+                        child: Text("No products", style: TextStyle(color: Colors.white)),
                       );
                     }
 
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: products.length,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: products.length,
                       itemBuilder: (context, index) {
 
                         final product = products[index].data();
@@ -241,9 +201,6 @@ class HomeScreen extends ConsumerWidget {
 
                         final double specialPrice =
                         (product["specialPrice"] ?? 0).toDouble();
-
-                        final double finalPrice =
-                        (specialPrice > 0) ? specialPrice : sellingPrice;
 
                         return Padding(
                           padding: const EdgeInsets.only(right: 15),
@@ -263,7 +220,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
 
                   error: (e, _) => Center(
-                    child: Text("Error: $e"),
+                    child: Text("Error: $e", style: const TextStyle(color: Colors.white)),
                   ),
                 ),
               ),
@@ -274,8 +231,11 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
 
-      /// 🔹 BOTTOM NAV
+      /// 🔥 DARK BOTTOM NAV
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFF111111),
+        selectedItemColor: const Color(0xFF7F5AF0),
+        unselectedItemColor: Colors.white54,
         currentIndex: 0,
         type: BottomNavigationBarType.fixed,
         items: const [
@@ -288,8 +248,24 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
+
+  /// 🔥 SECTION TITLE
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
 }
 
+/// 🔥 CATEGORY ITEM (DARK STYLE)
 class _CategoryItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -303,24 +279,26 @@ class _CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
 
         Container(
           height: 60,
           width: 60,
           decoration: BoxDecoration(
-            color: const Color(0xFF6C63FF).withOpacity(0.1),
+            color: Colors.white.withOpacity(0.05),
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Icon(icon, color: const Color(0xFF6C63FF)),
+          child: Icon(icon, color: Color(0xFF7F5AF0)),
         ),
 
         const SizedBox(height: 6),
 
         Text(
           label,
-          style: const TextStyle(fontSize: 12),
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.white70,
+          ),
           textAlign: TextAlign.center,
         ),
       ],
