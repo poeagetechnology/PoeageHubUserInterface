@@ -12,7 +12,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-
   int currentIndex = 0;
   int selectedDrawerIndex = 0;
 
@@ -20,13 +19,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final productsAsync = ref.watch(trendingProductsProvider);
     final bannerAsync = ref.watch(bannerProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
-
       drawer: _buildDrawer(),
 
       body: SafeArea(
@@ -73,14 +70,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
 
-
-
-              const SizedBox(height: 25),
+              const SizedBox(height: 20),
 
               /// 🔥 BANNER
               bannerAsync.when(
                 data: (snapshot) {
-
                   final banners = snapshot.docs;
                   if (banners.isEmpty) return const SizedBox();
 
@@ -91,19 +85,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       itemCount: banners.length,
                       itemBuilder: (context, index) {
-
                         final banner = banners[index].data();
                         final imageUrl = banner["imageUrl"] ?? "";
 
                         return Container(
                           width: MediaQuery.of(context).size.width - 60,
                           margin: const EdgeInsets.only(right: 15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.4),
+                                blurRadius: 10,
+                              )
+                            ],
+                          ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                            ),
+                            child: Image.network(imageUrl, fit: BoxFit.cover),
                           ),
                         );
                       },
@@ -119,12 +118,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
               const SizedBox(height: 25),
 
-              /// 🔥 CATEGORY TITLE
-              _sectionTitle("Categories", onTap: () {}),
+              /// 🔥 CATEGORY HEADER
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    const Text(
+                      "Categories",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    GestureDetector(
+                      onTap: _showAllCategories,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF7F5AF0).withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(Icons.grid_view, size: 16, color: Color(0xFF7F5AF0)),
+                            SizedBox(width: 5),
+                            Text(
+                              "All",
+                              style: TextStyle(color: Color(0xFF7F5AF0)),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
 
               const SizedBox(height: 15),
 
-              /// 🔥 CATEGORY GRID FIXED (overflow fix)
+              /// 🔥 CATEGORY GRID
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SizedBox(
@@ -147,7 +183,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 25),
 
               /// 🔥 TRENDING TITLE
-              _sectionTitle("Trending Products", onTap: () {}),
+              _sectionTitle("Trending Products"),
 
               const SizedBox(height: 15),
 
@@ -155,7 +191,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 height: 240,
                 child: productsAsync.when(
                   data: (snapshot) {
-
                     final products = snapshot.docs;
 
                     return ListView.builder(
@@ -163,7 +198,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       itemCount: products.length,
                       itemBuilder: (context, index) {
-
                         final product = products[index].data();
 
                         String image = "";
@@ -177,14 +211,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: ProductCard(
                             name: product["name"] ?? "",
                             image: image,
-                            sellingPrice: (product["sellingPrice"] ?? 0).toDouble(),
-                            specialPrice: (product["specialPrice"] ?? 0).toDouble(),
+                            sellingPrice:
+                            (product["sellingPrice"] ?? 0).toDouble(),
+                            specialPrice:
+                            (product["specialPrice"] ?? 0).toDouble(),
                           ),
                         );
                       },
                     );
                   },
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                  const Center(child: CircularProgressIndicator()),
                   error: (e, _) => const SizedBox(),
                 ),
               ),
@@ -196,27 +233,98 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
 
       /// 🔥 NAVBAR
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF111111),
-        selectedItemColor: const Color(0xFF7F5AF0),
-        unselectedItemColor: Colors.white54,
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() => currentIndex = index);
-        },
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view), label: "Categories"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
+      bottomNavigationBar: SizedBox(
+        height: 85,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+
+            /// ✅ FIXED WIDTH CALCULATION (NO OVERFLOW)
+            final itemWidth = (width - 40) / 5;
+
+            final icons = [
+              Icons.home,
+              Icons.favorite_border,
+              Icons.search,
+              Icons.shopping_cart,
+              Icons.person,
+            ];
+
+            /// ✅ CENTER POSITION (IMPORTANT)
+            final centerX =
+                currentIndex * itemWidth + itemWidth / 2 + 20;
+
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+
+                /// 🔥 CURVED NAVBAR WITH WAVE
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(horizontal: 25),
+                  child: CustomPaint(
+                    size: Size(width, 65),
+                    painter: NavBarPainter(centerX),
+                  ),
+                ),
+
+                /// 🔥 ICONS ROW
+                Positioned.fill(
+                  child: Row(
+                    children: List.generate(5, (index) {
+                      return GestureDetector(
+                        onTap: () => setState(() => currentIndex = index),
+                        child: SizedBox(
+                          width: itemWidth,
+                          child: Icon(
+                            icons[index],
+                            color: currentIndex == index
+                                ? Colors.transparent
+                                : Colors.white54,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+
+                /// 🔥 FLOATING ACTIVE ICON
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  bottom: 20,
+                  left: centerX - 30,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF7F5AF0),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF7F5AF0).withOpacity(0.6),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        )
+                      ],
+                    ),
+                    child: Icon(
+                      icons[currentIndex],
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  /// 🔥 DRAWER
+  /// 🔥 FULL DRAWER (FIXED)
   Widget _buildDrawer() {
     return Drawer(
       backgroundColor: const Color(0xFF111111),
@@ -224,7 +332,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
 
           UserAccountsDrawerHeader(
-            decoration: const BoxDecoration(color: Color(0xFF7F5AF0)),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF7F5AF0), Color(0xFF5A3FD0)],
+              ),
+            ),
             accountName: Text(user?.displayName ?? "User"),
             accountEmail: Text(user?.email ?? "No Email"),
             currentAccountPicture: const CircleAvatar(
@@ -243,8 +355,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
           const Divider(color: Colors.white24),
 
-          _drawerItem(Icons.description, "Terms", 4),
-          _drawerItem(Icons.privacy_tip, "Privacy", 5),
+          _drawerItem(Icons.description, "Terms & Conditions", 5),
+          _drawerItem(Icons.privacy_tip, "Privacy Policy", 6),
 
           const SizedBox(height: 10),
         ],
@@ -256,53 +368,85 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final isSelected = selectedDrawerIndex == index;
 
     return ListTile(
-      leading: Icon(icon, color: isSelected ? Color(0xFF7F5AF0) : Colors.white70),
+      leading: Icon(
+        icon,
+        color: isSelected ? const Color(0xFF7F5AF0) : Colors.white70,
+      ),
       title: Text(
         title,
         style: TextStyle(
-          color: isSelected ? Color(0xFF7F5AF0) : Colors.white,
+          color: isSelected ? const Color(0xFF7F5AF0) : Colors.white,
         ),
       ),
+      tileColor: isSelected
+          ? const Color(0xFF7F5AF0).withOpacity(0.1)
+          : Colors.transparent,
       onTap: () {
         setState(() => selectedDrawerIndex = index);
+        Navigator.pop(context);
       },
     );
   }
 
-  /// 🔥 SECTION TITLE WITH VIEW ALL
-  Widget _sectionTitle(String title, {VoidCallback? onTap}) {
+  void _showAllCategories() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1A1A),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (context) {
+        return GridView.count(
+          padding: const EdgeInsets.all(20),
+          crossAxisCount: 3,
+          children: const [
+            _CategoryItem(icon: Icons.phone_android, label: "Electronics"),
+            _CategoryItem(icon: Icons.checkroom, label: "Fashion"),
+            _CategoryItem(icon: Icons.chair, label: "Home"),
+            _CategoryItem(icon: Icons.sports_esports, label: "Gaming"),
+            _CategoryItem(icon: Icons.watch, label: "Watches"),
+            _CategoryItem(icon: Icons.more, label: "More"),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _navIcon(IconData icon, int index) {
+    final isSelected = currentIndex == index;
+
+    return GestureDetector(
+      onTap: () => setState(() => currentIndex = index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(8),
+        child: Icon(
+          icon,
+          color: isSelected
+              ? const Color(0xFF7F5AF0)
+              : Colors.white54,
+          size: isSelected ? 26 : 22,
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          GestureDetector(
-            onTap: onTap,
-            child: const Text(
-              "View All",
-              style: TextStyle(
-                color: Color(0xFF7F5AF0),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          )
-        ],
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
 }
 
-/// 🔥 CATEGORY ITEM
+/// CATEGORY ITEM
 class _CategoryItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -313,19 +457,83 @@ class _CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          height: 55,
-          width: 55,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(15),
+        InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: () {},
+          child: Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Icon(icon, color: const Color(0xFF7F5AF0)),
           ),
-          child: Icon(icon, color: Color(0xFF7F5AF0)),
         ),
+        const SizedBox(height: 6),
         const SizedBox(height: 6),
         Text(label,
             style: const TextStyle(color: Colors.white70, fontSize: 11)),
       ],
     );
+  }
+}
+class NavBarPainter extends CustomPainter {
+  final double centerX;
+
+  NavBarPainter(this.centerX);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF111111)
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+
+    const double radius = 25;
+    const double curveWidth = 40;   // 🔥 SMALL WIDTH (IMPORTANT)
+    const double curveHeight = -30; // 🔥 LIGHT LIFT ONLY
+
+    path.moveTo(0, radius);
+
+    /// LEFT EDGE
+    path.quadraticBezierTo(0, 0, radius, 0);
+
+    /// STRAIGHT LINE BEFORE CURVE
+    path.lineTo(centerX - curveWidth, 0);
+
+    /// 🔥 SMALL LOCAL CURVE (ONLY ICON AREA)
+    path.quadraticBezierTo(
+      centerX,
+      curveHeight,
+      centerX + curveWidth,
+      0,
+    );
+
+    /// STRAIGHT LINE AFTER CURVE
+    path.lineTo(size.width - radius, 0);
+
+    /// RIGHT EDGE
+    path.quadraticBezierTo(
+      size.width,
+      0,
+      size.width,
+      radius,
+    );
+
+    /// BOTTOM
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+
+    path.close();
+
+    canvas.drawShadow(path, Colors.black, 10, true);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant NavBarPainter oldDelegate) {
+    return oldDelegate.centerX != centerX;
   }
 }
