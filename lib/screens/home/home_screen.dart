@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'providers/home_provider.dart';
 import 'widgets/product_card.dart';
+import 'all_products_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -183,7 +184,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 25),
 
               /// 🔥 TRENDING TITLE
-              _sectionTitle("Trending Products"),
+              _sectionTitle(
+                "Trending Products",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AllProductsScreen(),
+                    ),
+                  );
+                },
+              ),
 
               const SizedBox(height: 15),
 
@@ -240,7 +251,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final width = constraints.maxWidth;
 
             /// ✅ FIXED WIDTH CALCULATION (NO OVERFLOW)
-            final itemWidth = (width - 40) / 5;
+            final itemWidth = (width - 10) / 5;
 
             final icons = [
               Icons.home,
@@ -261,10 +272,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 /// 🔥 CURVED NAVBAR WITH WAVE
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 25),
-                  child: CustomPaint(
-                    size: Size(width, 65),
-                    painter: NavBarPainter(centerX),
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Container(
+                    height: 60,
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF111111),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                 ),
 
@@ -293,7 +308,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                   bottom: 20,
-                  left: centerX - 30,
+                  left: centerX - 40,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     height: 60,
@@ -431,16 +446,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _sectionTitle(String title) {
+  Widget _sectionTitle(String title, {VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          if (onTap != null)
+            GestureDetector(
+              onTap: onTap,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF7F5AF0).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.grid_view,
+                        size: 16, color: Color(0xFF7F5AF0)),
+                    SizedBox(width: 5),
+                    Text(
+                      "All",
+                      style: TextStyle(
+                        color: Color(0xFF7F5AF0),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
