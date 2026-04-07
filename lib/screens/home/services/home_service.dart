@@ -33,4 +33,11 @@ class HomeService {
         .orderBy("createdAt", descending: true)
         .snapshots();
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getCategories() {
+    return FirebaseFirestore.instance
+        .collection('categories')
+        .where('isActive', isEqualTo: true)
+        .snapshots();
+  }
 }

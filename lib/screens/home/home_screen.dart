@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'providers/home_provider.dart';
 import 'widgets/product_card.dart';
 import 'all_products_screen.dart';
+import 'widgets/icon_mapper.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -337,6 +338,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
+
   }
 
   /// 🔥 FULL DRAWER (FIXED)
@@ -377,6 +379,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
+
   }
 
   Widget _drawerItem(IconData icon, String title, int index) {
@@ -401,6 +404,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         Navigator.pop(context);
       },
     );
+
   }
 
   void _showAllCategories() {
@@ -444,6 +448,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
+
   }
 
   Widget _sectionTitle(String title, {VoidCallback? onTap}) {
@@ -491,6 +496,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
+
   }
 }
 
@@ -578,6 +584,7 @@ class NavBarPainter extends CustomPainter {
 
     canvas.drawShadow(path, Colors.black, 10, true);
     canvas.drawPath(path, paint);
+
   }
 
   @override
@@ -585,3 +592,4 @@ class NavBarPainter extends CustomPainter {
     return oldDelegate.centerX != centerX;
   }
 }
+
