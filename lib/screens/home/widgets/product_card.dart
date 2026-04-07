@@ -28,7 +28,7 @@ class ProductCard extends StatelessWidget {
     return Container(
       width: 165,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05), // 🔥 DARK GLASS
+        color: Colors.white.withOpacity(0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.white10),
       ),
@@ -37,7 +37,7 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          /// 🔥 IMAGE SECTION
+          ///  IMAGE SECTION
           Stack(
             children: [
               ClipRRect(
@@ -63,7 +63,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
 
-              /// ❤️ WISHLIST ICON
+              /// WISHLIST ICON
               Positioned(
                 top: 8,
                 right: 8,
@@ -81,7 +81,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
 
-              /// 🔥 DISCOUNT BADGE
+              ///  DISCOUNT BADGE
               if (discount > 0)
                 Positioned(
                   left: 8,
@@ -90,7 +90,7 @@ class ProductCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFD80A28), // 🔥 BRAND COLOR
+                      color: const Color(0xFFD80A28),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -130,7 +130,7 @@ class ProductCard extends StatelessWidget {
 
                 const SizedBox(height: 6),
 
-                /// 💰 PRICE
+                /// PRICE
                 Row(
                   children: [
 
@@ -152,9 +152,9 @@ class ProductCard extends StatelessWidget {
                           "₹${sellingPrice.toStringAsFixed(0)}",
                           style: const TextStyle(
                             decoration: TextDecoration.lineThrough,
-                            decorationThickness: 5, // 🔥 IMPORTANT
-                            color: Colors.white70,  // 🔥 MORE VISIBLE
-                            fontSize: 13,           // 🔥 SLIGHTLY BIGGER
+                            decorationThickness: 5,
+                            color: Colors.white70,
+                            fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

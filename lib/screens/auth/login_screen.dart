@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
 
-                  /// 🔥 LOGO
+                  ///  LOGO
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -228,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 10),
 
-                  /// 🔥 LOGIN BUTTON (Purple Gradient)
+                  ///  LOGIN BUTTON (Purple Gradient)
                   GestureDetector(
                     onTap: isLoading ? null : loginUser,
                     child: Container(
@@ -261,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 20),
 
-                  /// 🔥 OR DIVIDER
+                  ///  OR DIVIDER
                   Row(
                     children: [
                       Expanded(child: Divider(color: Colors.white24)),
@@ -327,7 +327,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// 🔥 INPUT FIELD
+  ///  INPUT FIELD
   Widget _inputField({
     required TextEditingController controller,
     required String hint,
@@ -380,7 +380,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// 🔥 SOCIAL BUTTON
+  /// SOCIAL BUTTON
   Widget _socialButton({
     required IconData icon,
     required String text,

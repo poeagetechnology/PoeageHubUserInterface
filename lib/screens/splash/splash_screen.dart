@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0D0D), // 🔥 BLACK THEME
+      backgroundColor: const Color(0xFF0D0D0D),
 
       body: Center(
         child: FadeTransition(
@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                /// 🔥 LOGO (IMAGE)
+                ///  LOGO (IMAGE)
                 Container(
                   height: 100,
                   width: 100,
@@ -96,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const SizedBox(height: 25),
 
-                /// 🔥 APP NAME
+                ///  APP NAME
                 const Text(
                   "Poeage Hub",
                   style: TextStyle(
@@ -109,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const SizedBox(height: 8),
 
-                /// 🔥 TAGLINE
+                ///  TAGLINE
                 const Text(
                   "Premium Shopping",
                   style: TextStyle(
@@ -120,7 +120,7 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const SizedBox(height: 40),
 
-                /// 🔄 LOADING
+                ///  LOADING
                 const SizedBox(
                   width: 25,
                   height: 25,

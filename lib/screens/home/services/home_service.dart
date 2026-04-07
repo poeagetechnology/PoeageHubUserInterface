@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class HomeService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  ///  TRENDING PRODUCTS
   Stream<QuerySnapshot<Map<String, dynamic>>> getTrendingProducts() {
     return _firestore
         .collectionGroup('items')
@@ -11,6 +12,7 @@ class HomeService {
         .snapshots();
   }
 
+  /// PRODUCTS BY CATEGORY
   Stream<QuerySnapshot<Map<String, dynamic>>> getProductsByCategory(String category) {
     return _firestore
         .collectionGroup('items')
@@ -19,6 +21,7 @@ class HomeService {
         .snapshots();
   }
 
+  ///  PRODUCTS BY SUBCATEGORY
   Stream<QuerySnapshot<Map<String, dynamic>>> getProductsBySubCategory(String subCategory) {
     return _firestore
         .collectionGroup('items')
@@ -27,6 +30,7 @@ class HomeService {
         .snapshots();
   }
 
+  ///  BANNERS
   Stream<QuerySnapshot<Map<String, dynamic>>> getBanners() {
     return _firestore
         .collection("offer_banners")
@@ -34,10 +38,27 @@ class HomeService {
         .snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getCategories() {
-    return FirebaseFirestore.instance
-        .collection('categories')
-        .where('isActive', isEqualTo: true)
-        .snapshots();
+  ///  DYNAMIC CATEGORIES FROM PRODUCTS
+  Stream<List<String>> getDynamicCategories() {
+    return _firestore
+        .collectionGroup('items')
+        .snapshots()
+        .map((snapshot) {
+
+      final categoriesSet = <String>{};
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+
+        if (data.containsKey('category') &&
+            data['category'] != null &&
+            data['category'].toString().isNotEmpty) {
+
+          categoriesSet.add(data['category']);
+        }
+      }
+
+      return categoriesSet.toList();
+    });
   }
 }

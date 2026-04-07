@@ -1,46 +1,61 @@
 import 'package:flutter/material.dart';
 
-IconData getIcon(String name) {
-  switch (name) {
-    case 'local_grocery_store':
-      return Icons.local_grocery_store;
-    case 'devices':
-      return Icons.devices;
-    case 'checkroom':
-      return Icons.checkroom;
-    case 'spa':
-      return Icons.spa;
-    case 'kitchen':
-      return Icons.kitchen;
-    case 'electrical_services':
-      return Icons.electrical_services;
-    case 'smartphone':
-      return Icons.smartphone;
-    case 'computer':
-      return Icons.computer;
-    case 'tv':
-      return Icons.tv;
-    case 'sports_soccer':
-      return Icons.sports_soccer;
-    case 'directions_car':
-      return Icons.directions_car;
-    case 'toys':
-      return Icons.toys;
-    case 'menu_book':
-      return Icons.menu_book;
-    case 'health_and_safety':
-      return Icons.health_and_safety;
-    case 'pets':
-      return Icons.pets;
-    case 'edit':
-      return Icons.edit;
-    case 'diamond':
-      return Icons.diamond;
-    case 'hiking':
-      return Icons.hiking;
-    case 'work':
-      return Icons.work;
-    default:
-      return Icons.category;
-  }
+IconData getIcon(String category) {
+  final name = category.toLowerCase();
+
+  if (name.contains('grocery')) return Icons.local_grocery_store;
+
+  if (name.contains('electronic')) return Icons.devices;
+
+  if (name.contains('fashion')) return Icons.checkroom;
+
+  if (name.contains('beauty') || name.contains('personal'))
+    return Icons.spa;
+
+  if (name.contains('home') || name.contains('kitchen'))
+    return Icons.kitchen;
+
+  if (name.contains('appliance'))
+    return Icons.electrical_services;
+
+  if (name.contains('mobile') || name.contains('tablet'))
+    return Icons.smartphone;
+
+  if (name.contains('computer') || name.contains('laptop') || name.contains('accessories'))
+    return Icons.computer;
+
+  if (name.contains('tv') || name.contains('entertainment'))
+    return Icons.tv;
+
+  if (name.contains('sports') || name.contains('outdoor'))
+    return Icons.sports_soccer;
+
+  if (name.contains('automotive'))
+    return Icons.directions_car;
+
+  if (name.contains('toys') || name.contains('baby'))
+    return Icons.toys;
+
+  if (name.contains('books') || name.contains('media'))
+    return Icons.menu_book;
+
+  if (name.contains('health') || name.contains('wellness'))
+    return Icons.health_and_safety;
+
+  if (name.contains('pet'))
+    return Icons.pets;
+
+  if (name.contains('office') || name.contains('stationery'))
+    return Icons.work;
+
+  if (name.contains('jewellery'))
+    return Icons.diamond;
+
+  if (name.contains('footwear'))
+    return Icons.hiking;
+
+  if (name.contains('bags') || name.contains('luggage'))
+    return Icons.work_outline;
+
+  return Icons.category;
 }

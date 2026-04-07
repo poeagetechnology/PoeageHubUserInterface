@@ -23,6 +23,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final productsAsync = ref.watch(trendingProductsProvider);
     final bannerAsync = ref.watch(bannerProvider);
+    final categoriesAsync = ref.watch(categoryProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
@@ -34,7 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              /// 🔥 HEADER
+              /// HEADER
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Row(
@@ -74,7 +75,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
               const SizedBox(height: 20),
 
-              /// 🔥 BANNER
+              /// BANNER
               bannerAsync.when(
                 data: (snapshot) {
                   final banners = snapshot.docs;
@@ -120,7 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
               const SizedBox(height: 25),
 
-              /// 🔥 CATEGORY HEADER
+              /// CATEGORY HEADER
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -162,29 +163,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
               const SizedBox(height: 15),
 
-              /// 🔥 CATEGORY GRID
+              ///  CATEGORY GRID
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SizedBox(
                   height: 110,
-                  child: GridView.count(
-                    crossAxisCount: 4,
-                    physics: const NeverScrollableScrollPhysics(),
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    children: const [
-                      _CategoryItem(icon: Icons.phone_android, label: "Electronics"),
-                      _CategoryItem(icon: Icons.checkroom, label: "Fashion"),
-                      _CategoryItem(icon: Icons.chair, label: "Home"),
-                      _CategoryItem(icon: Icons.sports_esports, label: "Gaming"),
-                    ],
+                  child: categoriesAsync.when(
+                    data: (categories) {
+                      return GridView.builder(
+                        itemCount: categories.length > 4 ? 4 : categories.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          final category = categories[index];
+
+                          return _CategoryItem(
+                            icon: getIcon(category.toLowerCase()),
+                            label: category,
+                          );
+                        },
+                      );
+                    },
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (e, _) => const SizedBox(),
                   ),
                 ),
               ),
 
               const SizedBox(height: 25),
 
-              /// 🔥 TRENDING TITLE
+              ///  TRENDING TITLE
               _sectionTitle(
                 "Trending Products",
                 onTap: () {
@@ -244,14 +256,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
 
-      /// 🔥 NAVBAR
+      ///  NAVBAR
       bottomNavigationBar: SizedBox(
         height: 85,
         child: LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth;
 
-            /// ✅ FIXED WIDTH CALCULATION (NO OVERFLOW)
+            ///  FIXED WIDTH CALCULATION (NO OVERFLOW)
             final itemWidth = (width - 10) / 5;
 
             final icons = [
@@ -262,7 +274,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Icons.person,
             ];
 
-            /// ✅ CENTER POSITION (IMPORTANT)
+            /// CENTER POSITION (IMPORTANT)
             final centerX =
                 currentIndex * itemWidth + itemWidth / 2 + 20;
 
@@ -270,7 +282,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               alignment: Alignment.center,
               children: [
 
-                /// 🔥 CURVED NAVBAR WITH WAVE
+                ///  CURVED NAVBAR WITH WAVE
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   margin: const EdgeInsets.symmetric(horizontal: 5),
@@ -284,7 +296,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
 
-                /// 🔥 ICONS ROW
+                ///  ICONS ROW
                 Positioned.fill(
                   child: Row(
                     children: List.generate(5, (index) {
@@ -304,7 +316,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
 
-                /// 🔥 FLOATING ACTIVE ICON
+                ///  FLOATING ACTIVE ICON
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
@@ -341,7 +353,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   }
 
-  /// 🔥 FULL DRAWER (FIXED)
+  ///  FULL DRAWER (FIXED)
   Widget _buildDrawer() {
     return Drawer(
       backgroundColor: const Color(0xFF111111),
@@ -415,17 +427,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       builder: (context) {
-        return GridView.count(
-          padding: const EdgeInsets.all(20),
-          crossAxisCount: 3,
-          children: const [
-            _CategoryItem(icon: Icons.phone_android, label: "Electronics"),
-            _CategoryItem(icon: Icons.checkroom, label: "Fashion"),
-            _CategoryItem(icon: Icons.chair, label: "Home"),
-            _CategoryItem(icon: Icons.sports_esports, label: "Gaming"),
-            _CategoryItem(icon: Icons.watch, label: "Watches"),
-            _CategoryItem(icon: Icons.more, label: "More"),
-          ],
+        return Consumer(
+          builder: (context, ref, _) {
+            final categoriesAsync = ref.watch(categoryProvider);
+
+            return categoriesAsync.when(
+              data: (categories) {
+                return GridView.builder(
+                  padding: const EdgeInsets.all(20),
+                  itemCount: categories.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15,
+                  ),
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+
+                    return _CategoryItem(
+                      icon: getIcon(category.toLowerCase()),
+                      label: category,
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => const SizedBox(),
+            );
+          },
         );
       },
     );
@@ -510,24 +539,32 @@ class _CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        InkWell(
-          borderRadius: BorderRadius.circular(15),
-          onTap: () {},
-          child: Container(
-            height: 55,
-            width: 55,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Icon(icon, color: const Color(0xFF7F5AF0)),
+        Container(
+          height: 55,
+          width: 55,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
           ),
+          child: Icon(icon, color: const Color(0xFF7F5AF0)),
         ),
         const SizedBox(height: 6),
-        const SizedBox(height: 6),
-        Text(label,
-            style: const TextStyle(color: Colors.white70, fontSize: 11)),
+
+        ///  FLEXIBLE TEXT
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 10,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -546,8 +583,8 @@ class NavBarPainter extends CustomPainter {
     final path = Path();
 
     const double radius = 25;
-    const double curveWidth = 40;   // 🔥 SMALL WIDTH (IMPORTANT)
-    const double curveHeight = -30; // 🔥 LIGHT LIFT ONLY
+    const double curveWidth = 40;
+    const double curveHeight = -30;
 
     path.moveTo(0, radius);
 
@@ -557,7 +594,7 @@ class NavBarPainter extends CustomPainter {
     /// STRAIGHT LINE BEFORE CURVE
     path.lineTo(centerX - curveWidth, 0);
 
-    /// 🔥 SMALL LOCAL CURVE (ONLY ICON AREA)
+    ///  SMALL LOCAL CURVE (ONLY ICON AREA)
     path.quadraticBezierTo(
       centerX,
       curveHeight,

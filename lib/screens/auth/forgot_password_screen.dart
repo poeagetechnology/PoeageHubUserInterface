@@ -78,7 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: Column(
                 children: [
 
-                  /// 🔒 LOCK ICON (REPLACES LOGO)
+                  ///  LOCK ICON (REPLACES LOGO)
                   Container(
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
@@ -120,12 +120,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                   const SizedBox(height: 25),
 
-                  /// 🔥 EMAIL FIELD
+                  ///  EMAIL FIELD
                   _inputField(),
 
                   const SizedBox(height: 25),
 
-                  /// 🔥 BUTTON
+                  ///  BUTTON
                   GestureDetector(
                     onTap: isLoading ? null : resetPassword,
                     child: Container(
@@ -181,7 +181,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  /// 🔥 INPUT FIELD
+  ///  INPUT FIELD
   Widget _inputField() {
     return TextField(
       controller: emailController,

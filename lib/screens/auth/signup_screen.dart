@@ -87,7 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 children: [
 
-                  /// 🔥 LOGO (CIRCLE)
+                  /// LOGO (CIRCLE)
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -158,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   const SizedBox(height: 25),
 
-                  /// 🔥 CREATE ACCOUNT BUTTON
+                  /// CREATE ACCOUNT BUTTON
                   GestureDetector(
                     onTap: isLoading ? null : signUpUser,
                     child: Container(
@@ -223,7 +223,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  /// 🔥 INPUT FIELD
+  /// INPUT FIELD
   Widget _inputField({
     required TextEditingController controller,
     required String hint,
