@@ -34,10 +34,10 @@
               "client_type": 3
             },
             {
-              "client_id": "270573902154-bjpdcnuf3o3h09s5e20kd4omf3u2lcpf.apps.googleusercontent.com",
+              "client_id": "270573902154-33svohd5gmcaut1gqhm39v5jva1t3cq5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.adminpanel"
+                "bundle_id": "com.example.poeagehubUserInterface"
               }
             }
           ]
@@ -73,10 +73,10 @@
               "client_type": 3
             },
             {
-              "client_id": "270573902154-bjpdcnuf3o3h09s5e20kd4omf3u2lcpf.apps.googleusercontent.com",
+              "client_id": "270573902154-33svohd5gmcaut1gqhm39v5jva1t3cq5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.adminpanel"
+                "bundle_id": "com.example.poeagehubUserInterface"
               }
             }
           ]
@@ -91,6 +91,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "270573902154-9tvfmjdikgd2eg6qgv6vt6misg8v33a2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.poeagehub_user_interface",
+            "certificate_hash": "3adeb9bd939dba67680d1ebe907911fa4d31d1fd"
+          }
+        },
         {
           "client_id": "270573902154-7le8b4setu71bgubm3qfkhkdt4k4ubj5.apps.googleusercontent.com",
           "client_type": 3
@@ -112,10 +120,10 @@
               "client_type": 3
             },
             {
-              "client_id": "270573902154-bjpdcnuf3o3h09s5e20kd4omf3u2lcpf.apps.googleusercontent.com",
+              "client_id": "270573902154-33svohd5gmcaut1gqhm39v5jva1t3cq5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.adminpanel"
+                "bundle_id": "com.example.poeagehubUserInterface"
               }
             }
           ]
@@ -159,10 +167,10 @@
               "client_type": 3
             },
             {
-              "client_id": "270573902154-bjpdcnuf3o3h09s5e20kd4omf3u2lcpf.apps.googleusercontent.com",
+              "client_id": "270573902154-33svohd5gmcaut1gqhm39v5jva1t3cq5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.adminpanel"
+                "bundle_id": "com.example.poeagehubUserInterface"
               }
             }
           ]
@@ -206,10 +214,10 @@
               "client_type": 3
             },
             {
-              "client_id": "270573902154-bjpdcnuf3o3h09s5e20kd4omf3u2lcpf.apps.googleusercontent.com",
+              "client_id": "270573902154-33svohd5gmcaut1gqhm39v5jva1t3cq5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.adminpanel"
+                "bundle_id": "com.example.poeagehubUserInterface"
               }
             }
           ]
@@ -253,10 +261,10 @@
               "client_type": 3
             },
             {
-              "client_id": "270573902154-bjpdcnuf3o3h09s5e20kd4omf3u2lcpf.apps.googleusercontent.com",
+              "client_id": "270573902154-33svohd5gmcaut1gqhm39v5jva1t3cq5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.adminpanel"
+                "bundle_id": "com.example.poeagehubUserInterface"
               }
             }
           ]
