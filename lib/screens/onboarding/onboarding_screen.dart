@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'onboarding_model.dart';
-
+import '../../widgets/primary_button.dart';
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -132,54 +132,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       const Spacer(),
 
-                      ///  GRADIENT BUTTON
-                      InkWell(
+                      PrimaryButton(
+                        text: currentIndex == onboardingData.length - 1
+                            ? "Get Started"
+                            : "Next",
                         onTap: () async {
-                          if (currentIndex ==
-                              onboardingData.length - 1) {
-                            final prefs =
-                            await SharedPreferences.getInstance();
+                          if (currentIndex == onboardingData.length - 1) {
+                            final prefs = await SharedPreferences.getInstance();
                             await prefs.setBool('seenOnboarding', true);
 
-                            Navigator.pushReplacementNamed(
-                                context, '/login');
+                            Navigator.pushReplacementNamed(context, '/login');
                           } else {
                             _controller.nextPage(
-                              duration:
-                              const Duration(milliseconds: 400),
+                              duration: const Duration(milliseconds: 400),
                               curve: Curves.easeInOut,
                             );
                           }
                         },
-                        borderRadius: BorderRadius.circular(30),
-                        child: Container(
-                          height: 55,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFF693D9F),
-                                Color(0xFFAF84EF),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              currentIndex ==
-                                  onboardingData.length - 1
-                                  ? "Get Started"
-                                  : "Next",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
                       ),
 
                       const SizedBox(height: 30),

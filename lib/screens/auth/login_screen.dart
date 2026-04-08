@@ -4,6 +4,7 @@ import 'forgot_password_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import '../../widgets/primary_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -229,34 +230,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 10),
 
                   ///  LOGIN BUTTON (Purple Gradient)
-                  GestureDetector(
-                    onTap: isLoading ? null : loginUser,
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFF7F5AF0),
-                            Color(0xFF5A54E8),
-                          ],
-                        ),
-                      ),
-                      child: Center(
-                        child: isLoading
-                            ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                            : const Text(
-                          "Login",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+                  PrimaryButton(
+                    text: "Login",
+                    onTap: isLoading ? () {} : loginUser,
                   ),
 
                   const SizedBox(height: 20),
