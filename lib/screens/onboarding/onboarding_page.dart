@@ -11,7 +11,7 @@ class OnboardingPage extends StatelessWidget {
     return Stack(
       children: [
 
-        /// 🔥 FULL SCREEN IMAGE
+        ///  FULL SCREEN IMAGE
         Positioned.fill(
           child: Image.asset(
             data.image,
@@ -19,7 +19,7 @@ class OnboardingPage extends StatelessWidget {
           ),
         ),
 
-        /// 🔻 GRADIENT OVERLAY (SMOOTH MERGE)
+        ///  GRADIENT OVERLAY (SMOOTH MERGE)
         Positioned(
           bottom: 0,
           left: 0,

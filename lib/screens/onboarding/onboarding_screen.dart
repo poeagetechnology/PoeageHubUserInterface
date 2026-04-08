@@ -50,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           return Column(
             children: [
 
-              /// 🔥 TOP IMAGE
+              ///  TOP IMAGE
               Expanded(
                 flex: 6,
                 child: Stack(
@@ -62,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
 
-                    /// 🔻 Gradient overlay
+                    ///  Gradient overlay
                     Positioned(
                       bottom: 0,
                       left: 0,
@@ -85,7 +85,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
 
-              /// 🔘 DOTS
+              ///  DOTS
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -97,7 +97,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
 
-              /// 🔽 TEXT + BUTTON
+              /// TEXT + BUTTON
               Expanded(
                 flex: 4,
                 child: Padding(
@@ -132,7 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       const Spacer(),
 
-                      /// 🔥 GRADIENT BUTTON
+                      ///  GRADIENT BUTTON
                       InkWell(
                         onTap: () async {
                           if (currentIndex ==
@@ -194,7 +194,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  /// 🔘 DOT
+  /// DOT
   Widget dot(bool active) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
