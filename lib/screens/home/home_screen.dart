@@ -5,6 +5,7 @@ import 'providers/home_provider.dart';
 import 'widgets/product_card.dart';
 import 'all_products_screen.dart';
 import 'widgets/icon_mapper.dart';
+import 'dart:async';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -14,10 +15,44 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+
   int currentIndex = 0;
   int selectedDrawerIndex = 0;
 
+
   final user = FirebaseAuth.instance.currentUser;
+
+  final PageController _bannerController = PageController();
+  int _currentBanner = 0;
+  late final Timer _bannerTimer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _bannerTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      final bannerLength = ref.read(bannerProvider).maybeWhen(
+        data: (snapshot) => snapshot.docs.length,
+        orElse: () => 0,
+      );
+
+      if (bannerLength == 0) return;
+
+      if (_currentBanner < bannerLength - 1) {
+        _currentBanner++;
+      } else {
+        _currentBanner = 0;
+      }
+
+      if (_bannerController.hasClients) {
+        _bannerController.animateToPage(
+          _currentBanner,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,35 +116,70 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   final banners = snapshot.docs;
                   if (banners.isEmpty) return const SizedBox();
 
-                  return SizedBox(
-                    height: 160,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: banners.length,
-                      itemBuilder: (context, index) {
-                        final banner = banners[index].data();
-                        final imageUrl = banner["imageUrl"] ?? "";
+                  return Column(
+                    children: [
 
-                        return Container(
-                          width: MediaQuery.of(context).size.width - 60,
-                          margin: const EdgeInsets.only(right: 15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.4),
-                                blurRadius: 10,
-                              )
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(imageUrl, fit: BoxFit.cover),
-                          ),
-                        );
-                      },
-                    ),
+                      ///  BANNER
+                      SizedBox(
+                        height: 160,
+                        child: PageView.builder(
+                          controller: _bannerController,
+                          itemCount: banners.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _currentBanner = index;
+                            });
+                          },
+                          itemBuilder: (context, index) {
+                            final banner = banners[index].data();
+                            final imageUrl = banner["imageUrl"] ?? "";
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.4),
+                                    blurRadius: 10,
+                                  )
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      /// DOT INDICATOR
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(banners.length, (index) {
+                          final isActive = _currentBanner == index;
+
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            width: isActive ? 27 : 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: isActive
+                                  ? const Color(0xFF7F5AF0)
+                                  : Colors.white38,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          );
+                        }),
+                      )
+                    ],
                   );
                 },
                 loading: () => const SizedBox(
@@ -351,6 +421,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
 
+  }
+
+  @override
+  void dispose() {
+    _bannerTimer.cancel();        // stop timer
+    _bannerController.dispose();  // clean controller
+    super.dispose();
   }
 
   ///  FULL DRAWER (FIXED)
@@ -629,4 +706,3 @@ class NavBarPainter extends CustomPainter {
     return oldDelegate.centerX != centerX;
   }
 }
-
