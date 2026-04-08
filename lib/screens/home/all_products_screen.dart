@@ -15,7 +15,7 @@ class AllProductsScreen extends ConsumerWidget {
       backgroundColor: const Color(0xFF0D0D0D),
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFF111111),
+        backgroundColor: const Color(0xFFF3E6E6),
         title: const Text("All Products"),
       ),
 

@@ -23,7 +23,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     OnboardingModel(
       title: "Effortless Shopping",
       subtitle:
-      "Experience a seamless journey from browsing to checkout with an interface crafted for simplicity and speed.\n\nFind what you love, compare with ease, and shop confidently — all in just a few taps.\n\nEverything you need, exactly when you need it.",
+      "Experience a seamless journey from browsing to checkout with an interface crafted for simplicity and speed.\n\nFind what you love, compare with ease, and shop confidently — all in just a few taps.\nEverything you need, exactly when you need it.",
       image: "assets/onboard/onboard2.jpeg",
     ),
     OnboardingModel(

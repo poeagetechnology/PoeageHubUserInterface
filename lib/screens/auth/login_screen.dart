@@ -232,7 +232,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ///  LOGIN BUTTON (Purple Gradient)
                   PrimaryButton(
                     text: "Login",
-                    onTap: isLoading ? () {} : loginUser,
+                    isLoading: isLoading,
+                    onTap: loginUser,
                   ),
 
                   const SizedBox(height: 20),
