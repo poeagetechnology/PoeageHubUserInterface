@@ -6,6 +6,7 @@ import 'widgets/product_card.dart';
 import 'all_products_screen.dart';
 import 'widgets/icon_mapper.dart';
 import 'dart:async';
+import '../category/category_products_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -254,6 +255,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           return _CategoryItem(
                             icon: getIcon(category.toLowerCase()),
                             label: category,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      CategoryProductsScreen(category: category),
+                                ),
+                              );
+                            },
                           );
                         },
                       );
@@ -524,6 +534,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     return _CategoryItem(
                       icon: getIcon(category.toLowerCase()),
                       label: category,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                CategoryProductsScreen(category: category),
+                          ),
+                        );
+                      },
                     );
                   },
                 );
@@ -610,39 +629,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 class _CategoryItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const _CategoryItem({required this.icon, required this.label});
+  const _CategoryItem({
+    required this.icon,
+    required this.label,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: 55,
-          width: 55,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 55,
+            width: 55,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: const Color(0xFF7F5AF0)),
           ),
-          child: Icon(icon, color: const Color(0xFF7F5AF0)),
-        ),
-        const SizedBox(height: 6),
+          const SizedBox(height: 6),
 
-        ///  FLEXIBLE TEXT
-        Flexible(
-          child: Text(
-            label,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 10,
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 10,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
