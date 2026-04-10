@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../screens/home/home_screen.dart';
+import '../../screens/search/search_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -17,9 +18,8 @@ class _MainNavigationScreenState
   final List<Widget> screens = [
     const HomeScreen(),
 
-    /// TEMP (we upgrade later)
     const Center(child: Text("Wishlist")),
-    const Center(child: Text("Search")),
+    const SearchScreen(),
     const Center(child: Text("Cart")),
     const Center(child: Text("Profile")),
   ];
@@ -27,10 +27,8 @@ class _MainNavigationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: screens[currentIndex],
       backgroundColor: Colors.black87,
-
 
       bottomNavigationBar: SizedBox(
         height: 85,
@@ -54,6 +52,7 @@ class _MainNavigationScreenState
               alignment: Alignment.center,
               children: [
 
+
                 Container(
                   height: 60,
                   margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -62,6 +61,7 @@ class _MainNavigationScreenState
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
+
 
                 Positioned.fill(
                   child: Row(
@@ -86,6 +86,7 @@ class _MainNavigationScreenState
                   ),
                 ),
 
+
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 300),
                   bottom: 20,
@@ -93,8 +94,8 @@ class _MainNavigationScreenState
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF7F5AF0),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF7F5AF0),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
