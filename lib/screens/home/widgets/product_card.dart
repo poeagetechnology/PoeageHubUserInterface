@@ -16,7 +16,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final double finalPrice =
     (specialPrice > 0) ? specialPrice : sellingPrice;
 
@@ -37,7 +36,7 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          ///  IMAGE SECTION
+          /// IMAGE SECTION
           Stack(
             children: [
               ClipRRect(
@@ -47,23 +46,23 @@ class ProductCard extends StatelessWidget {
                 child: image.isNotEmpty
                     ? Image.network(
                   image,
-                  height: 140,
+                  height: 130, // 🔽 slightly reduced
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
-                    height: 140,
+                    height: 130,
                     color: Colors.grey.shade800,
                     child: const Icon(Icons.image, color: Colors.white54),
                   ),
                 )
                     : Container(
-                  height: 140,
+                  height: 130,
                   color: Colors.grey.shade800,
                   child: const Icon(Icons.image, color: Colors.white54),
                 ),
               ),
 
-              /// WISHLIST ICON
+              ///  WISHLIST
               Positioned(
                 top: 8,
                 right: 8,
@@ -81,7 +80,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
 
-              ///  DISCOUNT BADGE
+              ///  DISCOUNT
               if (discount > 0)
                 Positioned(
                   left: 8,
@@ -92,7 +91,9 @@ class ProductCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFFD80A28),
                       borderRadius: BorderRadius.circular(6),
+
                     ),
+
                     child: Text(
                       "$discount% OFF",
                       style: const TextStyle(
@@ -106,62 +107,93 @@ class ProductCard extends StatelessWidget {
             ],
           ),
 
-          /// PRODUCT INFO
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 8,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
 
-                ///  NAME
-                Text(
-                  name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
-                ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 6,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                const SizedBox(height: 6),
-
-                /// PRICE
-                Row(
-                  children: [
-
-                    Text(
-                      "₹${finalPrice.toStringAsFixed(0)}",
-                      style: const TextStyle(
-                        color: Color(0xFF7F5AF0),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
+                  /// 🏷 NAME
+                  Text(
+                    name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.white,
                     ),
+                  ),
 
-                    const SizedBox(width: 6),
+                  const SizedBox(height: 4),
 
-                    if (discount > 0)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 6),
-                        child: Text(
+                  /// PRICE
+                  Row(
+                    children: [
+                      Text(
+                        "₹${finalPrice.toStringAsFixed(0)}",
+                        style: const TextStyle(
+                          color: Color(0xFF7F5AF0),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+
+                      if (discount > 0)
+                        Text(
                           "₹${sellingPrice.toStringAsFixed(0)}",
                           style: const TextStyle(
                             decoration: TextDecoration.lineThrough,
-                            decorationThickness: 5,
-                            color: Colors.white70,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
+                            decorationThickness: 3,
+                            decorationColor:Colors.red,
+                            color: Colors.white54,
+                            fontSize: 12,
                           ),
                         ),
+                    ],
+                  ),
+
+                  const Spacer(),
+
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Added to cart "),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF7F5AF0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                  ],
-                ),
-              ],
+                      child: const Text(
+                        "Add to Cart",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

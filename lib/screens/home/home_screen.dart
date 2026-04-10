@@ -7,6 +7,7 @@ import 'all_products_screen.dart';
 import 'widgets/icon_mapper.dart';
 import 'dart:async';
 import '../category/category_products_screen.dart';
+import '../../screens/product/product_details_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -321,13 +322,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                         return Padding(
                           padding: const EdgeInsets.only(right: 15),
-                          child: ProductCard(
-                            name: product["name"] ?? "",
-                            image: image,
-                            sellingPrice:
-                            (product["sellingPrice"] ?? 0).toDouble(),
-                            specialPrice:
-                            (product["specialPrice"] ?? 0).toDouble(),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ProductDetailScreen(product: product),
+                                ),
+                              );
+                            },
+                            child: ProductCard(
+                              name: product["name"] ?? "",
+                              image: image,
+                              sellingPrice: (product["sellingPrice"] ?? 0).toDouble(),
+                              specialPrice: (product["specialPrice"] ?? 0).toDouble(),
+                            ),
                           ),
                         );
                       },
