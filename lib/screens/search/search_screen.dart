@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home/providers/home_provider.dart';
@@ -16,6 +18,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
 
   List<String> searchHistory = [];
+
+  File? selectedImage;
 
   @override
   void initState() {
@@ -54,6 +58,54 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     setState(() => searchHistory.clear());
   }
 
+  ///  PICK IMAGE
+  Future<void> pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      setState(() {
+        selectedImage = File(pickedFile.path);
+      });
+
+
+    }
+  }
+
+  void showImagePickerSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1C1C1E),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: Colors.white),
+              title: const Text("Camera",
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo, color: Colors.white),
+              title: const Text("Gallery",
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsAsync = ref.watch(trendingProductsProvider);
@@ -66,7 +118,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         child: Column(
           children: [
 
-
+            ///  SEARCH BAR
             Container(
               margin: const EdgeInsets.all(12),
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -77,7 +129,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               child: Row(
                 children: [
                   const Icon(Icons.search, color: Colors.grey),
+
                   const SizedBox(width: 8),
+
                   Expanded(
                     child: TextField(
                       controller: searchController,
@@ -85,25 +139,50 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       onChanged: (_) => setState(() {}),
                       onSubmitted: (value) => saveSearch(value),
                       decoration: const InputDecoration(
-                        hintText: "Search products, brands...",
+                        hintText: "Search products...",
                         hintStyle: TextStyle(color: Colors.grey),
                         border: InputBorder.none,
                       ),
                     ),
                   ),
+
+                  /// CAMERA BUTTON
+                  IconButton(
+                    icon: const Icon(Icons.camera_alt,
+                        color: Colors.white70),
+                    onPressed: showImagePickerSheet,
+                  ),
+
                   if (searchController.text.isNotEmpty)
                     IconButton(
+                      icon: const Icon(Icons.close, color: Colors.grey),
                       onPressed: () {
                         searchController.clear();
                         setState(() {});
                       },
-                      icon: const Icon(Icons.close, color: Colors.grey),
-                    )
+                    ),
                 ],
               ),
             ),
 
-            /// RECENT SEARCHES
+            ///  SELECTED IMAGE PREVIEW
+            if (selectedImage != null)
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                height: 120,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: FileImage(selectedImage!),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+            const SizedBox(height: 10),
+
+            /// HISTORY
             if (query.isEmpty && searchHistory.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -114,89 +193,65 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       "Recent Searches",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     TextButton(
                       onPressed: clearHistory,
-                      child: const Text(
-                        "Clear",
-                        style: TextStyle(color: Colors.redAccent),
-                      ),
+                      child: const Text("Clear",
+                          style: TextStyle(color: Colors.red)),
                     )
                   ],
                 ),
               ),
 
-            if (query.isEmpty && searchHistory.isNotEmpty)
-              SizedBox(
-                height: 45,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  children: searchHistory.map((item) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: GestureDetector(
-                        onTap: () {
-                          searchController.text = item;
-                          setState(() {});
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1C1C1E),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            item,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+            if (query.isEmpty)
+              Wrap(
+                spacing: 8,
+                children: searchHistory.map((item) {
+                  return ActionChip(
+                    label: Text(item),
+                    backgroundColor: const Color(0xFF1C1C1E),
+                    labelStyle: const TextStyle(color: Colors.white),
+                    onPressed: () {
+                      searchController.text = item;
+                      setState(() {});
+                    },
+                  );
+                }).toList(),
               ),
 
             const SizedBox(height: 10),
 
-
+            /// PRODUCTS
             Expanded(
               child: productsAsync.when(
                 data: (snapshot) {
                   final products =
-                  snapshot.docs.map((doc) => doc.data()).toList();
+                  snapshot.docs.map((e) => e.data()).toList();
 
-                  final filteredProducts = products.where((product) {
+                  final filtered = products.where((product) {
                     final name =
                     (product["name"] ?? "").toString().toLowerCase();
                     return name.contains(query);
                   }).toList();
 
-                  /// EMPTY SEARCH
-                  if (query.isEmpty) {
-                    return _emptySearchUI();
+                  if (query.isEmpty && selectedImage == null) {
+                    return _emptyUI();
                   }
 
-                  if (filteredProducts.isEmpty) {
+                  if (filtered.isEmpty) {
                     return const Center(
-                      child: Text(
-                        "No products found 😔",
-                        style: TextStyle(color: Colors.white70),
-                      ),
+                      child: Text("No products found 😔",
+                          style: TextStyle(color: Colors.white70)),
                     );
                   }
 
                   return ListView.builder(
                     padding: const EdgeInsets.all(12),
-                    itemCount: filteredProducts.length,
+                    itemCount: filtered.length,
                     itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
+                      final product = filtered[index];
 
                       String image = "";
                       if (product["images"] != null &&
@@ -227,47 +282,23 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: image.isNotEmpty
-                                    ? Image.network(
+                                child: Image.network(
                                   image,
                                   width: 60,
                                   height: 60,
                                   fit: BoxFit.cover,
-                                )
-                                    : Container(
-                                  width: 60,
-                                  height: 60,
-                                  color: Colors.grey,
-                                  child: const Icon(Icons.image),
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      product["name"] ?? "",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      "₹${product["sellingPrice"] ?? 0}",
-                                      style: const TextStyle(
-                                        color: Colors.greenAccent,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  product["name"] ?? "",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -277,11 +308,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 },
                 loading: () =>
                 const Center(child: CircularProgressIndicator()),
-                error: (e, _) => const Center(
-                  child: Text(
-                    "Error loading products",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                error: (_, __) => const Center(
+                  child: Text("Error loading products",
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
             ),
@@ -291,27 +320,20 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     );
   }
 
-
-  Widget _emptySearchUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Icon(Icons.search, size: 80, color: Colors.white24),
-        SizedBox(height: 10),
-        Text(
-          "Search for products",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: 5),
-        Text(
-          "Find your favorite items instantly",
-          style: TextStyle(color: Colors.white54),
-        ),
-      ],
+  ///  EMPTY UI
+  Widget _emptyUI() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.search, size: 80, color: Colors.white24),
+          SizedBox(height: 10),
+          Text(
+            "Search or use image to find products",
+            style: TextStyle(color: Colors.white70),
+          )
+        ],
+      ),
     );
   }
 
