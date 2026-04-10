@@ -106,7 +106,7 @@ class ProductCard extends StatelessWidget {
             ],
           ),
 
-          /// 🔽 PRODUCT INFO
+          /// PRODUCT INFO
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 10,
@@ -116,7 +116,7 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                /// 📝 NAME
+                ///  NAME
                 Text(
                   name,
                   maxLines: 2,

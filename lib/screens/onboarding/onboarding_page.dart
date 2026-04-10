@@ -19,7 +19,7 @@ class OnboardingPage extends StatelessWidget {
           ),
         ),
 
-        ///  GRADIENT OVERLAY (SMOOTH MERGE)
+        ///  GRADIENT OVERLAY
         Positioned(
           bottom: 0,
           left: 0,

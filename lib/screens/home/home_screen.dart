@@ -267,7 +267,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   MaterialPageRoute(
                                     builder: (_) => CategoryProductsScreen(
                                       category: category,
-                                      allProducts: products, // 🔥 ADD THIS
+                                      allProducts: products,
                                     ),
                                   ),
                                 );
@@ -555,7 +555,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             MaterialPageRoute(
                               builder: (_) => CategoryProductsScreen(
                                 category: category,
-                                allProducts: products, // 🔥 ADD THIS
+                                allProducts: products,
                               ),
                             ),
                           );

@@ -229,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 10),
 
-                  ///  LOGIN BUTTON (Purple Gradient)
+                  ///  LOGIN BUTTON
                   PrimaryButton(
                     text: "Login",
                     isLoading: isLoading,

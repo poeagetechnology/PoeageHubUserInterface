@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
-                      "assets/logo.png", // ✅ your logo here
+                      "assets/logo.png",
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -125,7 +125,7 @@ class _SplashScreenState extends State<SplashScreen>
                   height: 25,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Colors.white, // ✅ no purple
+                    color: Colors.white,
                   ),
                 ),
               ],

@@ -78,7 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: Column(
                 children: [
 
-                  ///  LOCK ICON (REPLACES LOGO)
+                  ///  LOCK ICON
                   Container(
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
@@ -159,7 +159,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                   const SizedBox(height: 20),
 
-                  /// 🔙 BACK
+
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);

@@ -4,12 +4,12 @@ import '../home/widgets/product_card.dart';
 
 class CategoryProductsScreen extends ConsumerStatefulWidget {
   final String category;
-  final List<Map<String, dynamic>> allProducts; // 🔥 ADD THIS
+  final List<Map<String, dynamic>> allProducts;
 
   const CategoryProductsScreen({
     super.key,
     required this.category,
-    required this.allProducts, // 🔥 ADD THIS
+    required this.allProducts,
   });
 
   @override
@@ -26,25 +26,23 @@ class _CategoryProductsScreenState
   @override
   void initState() {
     super.initState();
-    filterProducts(); // 🔥 NO FIREBASE CALL
+    filterProducts();
   }
 
   void filterProducts() {
     List<Map<String, dynamic>> temp = [];
 
     for (var product in widget.allProducts) {
+      
+      print(" PRODUCT: $product");
 
-      /// 🔥 DEBUG PRINT (VERY IMPORTANT)
-      print("📦 PRODUCT: $product");
-
-      /// 🔥 TRY MULTIPLE KEYS (your data may vary)
       final category = product["category"] ??
           product["mainCategory"] ??
           product["type"] ??
           "";
 
-      print("👉 Product Category: $category");
-      print("👉 Selected Category: ${widget.category}");
+      print("Product Category: $category");
+      print("Selected Category: ${widget.category}");
 
       if (category.toString().toLowerCase().trim() ==
           widget.category.toLowerCase().trim()) {
@@ -52,7 +50,7 @@ class _CategoryProductsScreenState
       }
     }
 
-    print("🔥 FILTERED COUNT: ${temp.length}");
+    print("FILTERED COUNT: ${temp.length}");
 
     setState(() {
       filteredProducts = temp;
@@ -97,7 +95,6 @@ class _CategoryProductsScreenState
 
           final product = filteredProducts[index];
 
-          /// 🔥 SIMPLE STRUCTURE (same as trending)
           String image = "";
           if (product["images"] != null &&
               product["images"].isNotEmpty) {

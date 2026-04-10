@@ -87,7 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 children: [
 
-                  /// LOGO (CIRCLE)
+                  /// LOGO
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(

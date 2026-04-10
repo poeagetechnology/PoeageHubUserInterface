@@ -50,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           return Column(
             children: [
 
-              ///  TOP IMAGE
+
               Expanded(
                 flex: 6,
                 child: Stack(
@@ -119,7 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       const SizedBox(height: 10),
 
-                      /// SUBTITLE (IMPROVED SPACING)
+                      /// SUBTITLE
                       Text(
                         data.subtitle,
                         textAlign: TextAlign.center,

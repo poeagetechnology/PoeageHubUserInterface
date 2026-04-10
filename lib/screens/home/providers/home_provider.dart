@@ -37,7 +37,7 @@ StreamProvider<QuerySnapshot<Map<String, dynamic>>>((ref) {
   return homeService.getBanners();
 });
 
-///DYNAMIC CATEGORY PROVIDER (FROM PRODUCTS)
+///DYNAMIC CATEGORY PROVIDER
 final categoryProvider =
 StreamProvider<List<String>>((ref) {
   final homeService = ref.watch(homeServiceProvider);
