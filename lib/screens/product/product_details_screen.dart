@@ -28,7 +28,7 @@ class ProductDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            /// 🖼 IMAGE
+            /// IMAGE
             if (image.isNotEmpty)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -37,7 +37,7 @@ class ProductDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// 🏷 NAME
+            ///  NAME
             Text(
               product["name"] ?? "",
               style: const TextStyle(
@@ -49,7 +49,7 @@ class ProductDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            /// 💰 PRICE
+            ///  PRICE
             Text(
               "₹${product["sellingPrice"] ?? 0}",
               style: const TextStyle(
@@ -60,7 +60,7 @@ class ProductDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// 📄 DESCRIPTION
+            ///  DESCRIPTION
             Text(
               product["description"] ?? "No description",
               style: const TextStyle(color: Colors.white70),

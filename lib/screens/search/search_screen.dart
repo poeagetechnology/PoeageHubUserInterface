@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../home/providers/home_provider.dart';
+import '../../screens/product/product_details_screen.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -51,7 +52,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             return name.contains(query);
           }).toList();
 
-          /// 🔍 EMPTY SEARCH
           if (query.isEmpty) {
             return const Center(
               child: Text(
@@ -61,7 +61,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             );
           }
 
-          /// ❌ NO RESULTS
           if (filteredProducts.isEmpty) {
             return const Center(
               child: Text(
@@ -71,7 +70,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             );
           }
 
-          /// ✅ RESULTS
           return ListView.builder(
             itemCount: filteredProducts.length,
             itemBuilder: (context, index) {
@@ -85,6 +83,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               }
 
               return ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ProductDetailScreen(product: product),
+                    ),
+                  );
+                },
+
                 leading: image.isNotEmpty
                     ? ClipRRect(
                   borderRadius: BorderRadius.circular(8),
