@@ -23,7 +23,7 @@ class _CategoryProductsScreenState
   List<Map<String, dynamic>> filteredProducts = [];
   bool isLoading = true;
 
-  /// 🔥 FILTER VARIABLES
+  ///  FILTER VARIABLES
   String selectedSort = "none";
   double minPrice = 0;
   double maxPrice = 100000;
@@ -49,14 +49,14 @@ class _CategoryProductsScreenState
       if (category.toString().toLowerCase().trim() ==
           widget.category.toLowerCase().trim()) {
 
-        /// 🔥 PRICE FILTER
+        /// PRICE FILTER
         if (price >= minPrice && price <= maxPrice) {
           temp.add(product);
         }
       }
     }
 
-    /// 🔥 SORTING
+    ///  SORTING
     if (selectedSort == "low_to_high") {
       temp.sort((a, b) =>
           (a["sellingPrice"] ?? 0)
@@ -73,7 +73,7 @@ class _CategoryProductsScreenState
     });
   }
 
-  /// 🔥 FILTER BOTTOM SHEET
+  ///  FILTER BOTTOM SHEET
   void showFilterBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -102,7 +102,7 @@ class _CategoryProductsScreenState
 
                   const SizedBox(height: 20),
 
-                  /// 🔽 SORT DROPDOWN
+                  /// SORT DROPDOWN
                   DropdownButton<String>(
                     dropdownColor: Colors.black,
                     value: selectedSort,
@@ -132,7 +132,7 @@ class _CategoryProductsScreenState
 
                   const SizedBox(height: 20),
 
-                  /// 💰 PRICE RANGE
+                  ///  PRICE RANGE
                   RangeSlider(
                     values: RangeValues(minPrice, maxPrice),
                     min: 0,
@@ -155,7 +155,7 @@ class _CategoryProductsScreenState
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      filterProducts(); // 🔥 APPLY
+                      filterProducts();
                     },
                     child: const Text("Apply Filters"),
                   )
@@ -173,7 +173,6 @@ class _CategoryProductsScreenState
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
 
-      /// 🔥 UPGRADED APPBAR
       appBar: AppBar(
         backgroundColor: Colors.deepPurpleAccent,
         elevation: 0,
@@ -197,7 +196,7 @@ class _CategoryProductsScreenState
 
           : filteredProducts.isEmpty
 
-      /// 🔥 BEAUTIFUL EMPTY UI
+      ///  BEAUTIFUL EMPTY UI
           ? Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +221,7 @@ class _CategoryProductsScreenState
         ),
       )
 
-      /// 🔥 PRODUCTS GRID
+      ///  PRODUCTS GRID
           : GridView.builder(
         padding: const EdgeInsets.all(20),
         itemCount: filteredProducts.length,

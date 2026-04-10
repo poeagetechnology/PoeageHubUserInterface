@@ -7,7 +7,9 @@ import 'firebase_options.dart';
 // Screens
 import 'screens/splash/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
-import 'screens/home/home_screen.dart';
+
+// 🔥 NEW IMPORT
+import 'core/navigation/main_navigation_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +26,6 @@ class PoeageHubApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'PoeageHub',
       debugShowCheckedModeBanner: false,
@@ -36,15 +37,16 @@ class PoeageHubApp extends StatelessWidget {
         useMaterial3: true,
       ),
 
-      // First screen when app starts
+      /// FIRST SCREEN
       home: const SplashScreen(),
 
-      // App navigation routes
+      /// ROUTES
       routes: {
 
         "/login": (context) => const LoginScreen(),
 
-        "/home": (context) => const HomeScreen(),
+        /// 🔥 IMPORTANT CHANGE
+        "/home": (context) => const MainNavigationScreen(),
 
       },
     );
