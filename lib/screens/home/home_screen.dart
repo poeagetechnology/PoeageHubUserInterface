@@ -256,13 +256,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             icon: getIcon(category.toLowerCase()),
                             label: category,
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      CategoryProductsScreen(category: category),
-                                ),
-                              );
+                              final productsAsync = ref.read(trendingProductsProvider);
+
+                              productsAsync.whenData((snapshot) {
+                                final products =
+                                snapshot.docs.map((doc) => doc.data()).toList();
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => CategoryProductsScreen(
+                                      category: category,
+                                      allProducts: products, // 🔥 ADD THIS
+                                    ),
+                                  ),
+                                );
+                              });
                             },
                           );
                         },
@@ -535,13 +544,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       icon: getIcon(category.toLowerCase()),
                       label: category,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                CategoryProductsScreen(category: category),
-                          ),
-                        );
+                        final productsAsync = ref.read(trendingProductsProvider);
+
+                        productsAsync.whenData((snapshot) {
+                          final products =
+                          snapshot.docs.map((doc) => doc.data()).toList();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => CategoryProductsScreen(
+                                category: category,
+                                allProducts: products, // 🔥 ADD THIS
+                              ),
+                            ),
+                          );
+                        });
                       },
                     );
                   },
