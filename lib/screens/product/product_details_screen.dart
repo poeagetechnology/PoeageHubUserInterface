@@ -34,7 +34,7 @@ class ProductDetailScreen extends StatelessWidget {
       backgroundColor: Colors.black,
 
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white54,
         title: Text(product["name"] ?? ""),
       ),
 
